@@ -2,13 +2,23 @@
     <string name="app_name">My Application</string>
 
     <string name="MainActivity_Button_Add">X</string>
-    <string name="MainActivity_BottomPanel_Button1">X</string>
-    <string name="MainActivity_BottomPanel_Button2">X</string>
-    <string name="MainActivity_BottomPanel_Button3">X</string>
-    <string name="MainActivity_BottomPanel_Button4">X</string>
+    <string name="MainActivity_BottomPanel_ButtonAdd">A</string>
+    <string name="MainActivity_BottomPanel_ButtonList">L</string>
+    <string name="MainActivity_BottomPanel_ButtonSettings">S</string>
 
     <string name="PlacesActivity_ButtonBack">X</string>
 
     <string name="PickOnMapActivity_ButtonBack">X</string>
     <string name="PickOnMapActivity_ButtonConfirm">CONFIRM</string>
+
+    <string name="AddActivity_ButtonBack">X</string>
+    <string name="AddActivity_ButtonPick">Pick</string>
+    <string name="AddActivity_ButtonConfirm">Confirm</string>
+    <string name="AddActivity_TextViewAddress">Address</string>
+    <string name="AddActivity_TextViewName">Name</string>
+    <string name="AddActivity_TextViewDescription">Description</string>
+    <string name="AddActivity_TextInputAddressHint">address...</string>
+    <string name="AddActivity_TextInputNameHint">name...</string>
+    <string name="AddActivity_TextInputDescriptionHint">description...</string>
+
 </resources>

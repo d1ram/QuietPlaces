@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="MyButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">#80403F4C</item>
+        <item name="backgroundTint">#802A2B2E</item>
         <item name="android:textColor">@color/light_text</item>
         <item name="cornerRadius">16dp</item>
         <item name="android:insetTop">0dp</item>

@@ -6,6 +6,7 @@
     <color name="green_dark">#8FB339</color>
     <color name="green_very_dark">#4B5842</color>
 
-    <color name="gray_dark">#403F4C</color>
+    <color name="gray_dark">#2A2B2E</color>
+    <color name="light_peal">#F4EDEA</color>
     <color name="gray_light">#8B939C</color>
 </resources>

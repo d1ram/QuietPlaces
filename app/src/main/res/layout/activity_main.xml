@@ -25,7 +25,6 @@
         android:background="@drawable/rounded_rect2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <View
@@ -46,13 +45,12 @@
         android:background="@drawable/line_bottom"
         app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/view_bg"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnBack"
         style="@style/MyButtonStyle"
         android:layout_height="60dp"
         android:layout_width="60dp"
@@ -66,58 +64,42 @@
         app:layout_constraintWidth_percent="0.2" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/BottomPanel_btnAdd"
         style="@style/Bottom_Panel_Buttons"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"
-        android:text="@string/MainActivity_BottomPanel_Button1"
+        android:text="@string/MainActivity_BottomPanel_ButtonAdd"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/view"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/BottomPanel_btnList"
         style="@style/Bottom_Panel_Buttons"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="56dp"
         android:layout_marginTop="10dp"
-        android:text="@string/MainActivity_BottomPanel_Button2"
+        android:text="@string/MainActivity_BottomPanel_ButtonList"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button2"
+        app:layout_constraintEnd_toStartOf="@+id/BottomPanel_btnSettings"
+        app:layout_constraintStart_toEndOf="@+id/BottomPanel_btnAdd"
         app:layout_constraintTop_toTopOf="@+id/view"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/BottomPanel_btnSettings"
         style="@style/Bottom_Panel_Buttons"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="76dp"
-        android:text="@string/MainActivity_BottomPanel_Button3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button3"
-        app:layout_constraintTop_toTopOf="@+id/view"
-        app:layout_constraintVertical_bias="0.476" />
-
-    <Button
-        android:id="@+id/button5"
-        style="@style/Bottom_Panel_Buttons"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/MainActivity_BottomPanel_Button4"
+        android:layout_marginEnd="40dp"
+        android:text="@string/MainActivity_BottomPanel_ButtonSettings"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/button4"
         app:layout_constraintTop_toTopOf="@+id/view"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.476" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

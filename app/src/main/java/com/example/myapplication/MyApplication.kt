@@ -4,6 +4,10 @@ import android.app.Application
 import android.content.Context
 import java.io.File
 import java.util.UUID
+import com.example.myapplication.PlaceSerializable
+import com.example.myapplication.MyAddressSerializable
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
 class MyApplication : Application() {
 
@@ -12,21 +16,22 @@ class MyApplication : Application() {
             private set
     }
 
-    // UUID приложения на устройстве
-
     lateinit var QuietPlaces : MutableList<Place>
         private set
     var appUuid: String = ""
         private set
 
-//    private val json = Json { prettyPrint = true; ignoreUnknownKeys = true }
+    private val json = Json { prettyPrint = true; ignoreUnknownKeys = true }
     private val dataFile by lazy { File(filesDir, "accounts.json") }
 
     override fun onCreate() {
         super.onCreate()
         instance = this
+        QuietPlaces = mutableListOf()
+
+//        clearFromJson()
         loadAppUuid()
-//        loadAccountsFromJson()
+        loadAccountsFromJson()
     }
 
     // UUID приложения
@@ -37,46 +42,51 @@ class MyApplication : Application() {
         }
     }
 
-    // Сохранение в JSON (через DTO)
-//    private fun saveAccountsToJson() {
-//        // сохраняем все аккуаанты как один тип — SerializableAccount
-//        // для обычных аккаунтов percentage = 0
-//        val listToSave = bank.getAccs().map { acc ->
-//            SerializableAccount(
-//                id = acc.ID,
-//                person = SerializablePerson(acc.person.Name, acc.person.Surname),
-//                balance = acc.balance,
-//                percentage = if (acc is com.example.lib.SavingAccount) acc.percentage ?: 0 else 0
-//            )
-//        }
-//        dataFile.writeText(json.encodeToString(listToSave))
-//    }
+    private fun savePlacesToJson(){
+        var listToSave = QuietPlaces.map { ple ->
+            PlaceSerializable(
+                Address = MyAddressSerializable (
+                    lat = ple.Address.lat,
+                    lng = ple.Address.lng
+                ),
+                Name = ple.Name,
+                Description = ple.Description
+            )
+        }
+        dataFile.writeText(json.encodeToString(listToSave))
+    }
 
     // ──────────────────────  загрузка  ──────────────────────
-//    private fun loadAccountsFromJson() {
-//        if (!dataFile.exists()) return
-//
-//        try {
-//            val list = json.decodeFromString<List<SerializableAccount>>(dataFile.readText())
-//
-//            bank.getAccs().clear()
-//
-//            list.forEach { dto ->
-//                val form = AccountForm(
-//                    name = dto.person.name,
-//                    surname = dto.person.surname,
-//                    balance = dto.balance,
-//                    percentage = if (dto.percentage!! > 0) dto.percentage else null   // 0 → обычный аккаунт
-//                )
-//                addAccountFromForm(form)
-//            }
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        }
-//    }
+    private fun loadAccountsFromJson() {
+        if (!dataFile.exists()) return
+
+        try {
+            val list = json.decodeFromString<List<PlaceSerializable>>(dataFile.readText())
+
+            QuietPlaces.clear()
+
+            list.forEach { dto ->
+                val place = Place(
+                    Address = MyAddress(dto.Address.lat, dto.Address.lng),
+                    Name = dto.Name,
+                    Description = dto.Description
+                )
+                QuietPlaces.add(place)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     private fun clearFromJson(){
         if (dataFile.exists()){
             dataFile.delete()
         }
+    }
+
+    fun AddPlaceToList(address : MyAddress, name : String, description : String){
+        var place = Place(address, name, description);
+        QuietPlaces.add(place);
+        savePlacesToJson()
     }
 }
