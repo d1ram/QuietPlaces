@@ -1,16 +1,13 @@
 package com.example.myapplication
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
-import android.location.Geocoder
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
-import android.widget.SearchView
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -18,8 +15,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
-import java.io.IOException
 import com.example.myapplication.databinding.ActivityMainBinding
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.MapStyleOptions
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -69,6 +67,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         UpdateMarkers()
     }
 
+    private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
+        val vectorDrawable = ContextCompat.getDrawable(context, vectorResId) ?: return null
+        vectorDrawable.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
+        val bitmap = Bitmap.createBitmap(
+            vectorDrawable.intrinsicWidth,
+            vectorDrawable.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = android.graphics.Canvas(bitmap)
+        vectorDrawable.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
+
     override fun onResume() {    super.onResume()
         // Проверяем, инициализирована ли карта, прежде чем обновлять маркеры
         if (::googleMap.isInitialized) {
@@ -76,24 +87,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             UpdateMarkers()
         }
     }
-
-//    private fun searchLocation(locationName: String) {
-//        val geocoder = Geocoder(this)
-//        try {
-//            val addressList = geocoder.getFromLocationName(locationName, 5)
-//            val addressInCity = addressList?.firstOrNull { it.locality?.contains("Павлодар") == true }
-//            if (addressInCity != null) {
-//                val latLng = LatLng(addressInCity.latitude, addressInCity.longitude)
-//                googleMap.addMarker(MarkerOptions().position(latLng).title(locationName))
-//                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-//            } else {
-//                Toast.makeText(this, "Место не найдено в Павлодаре", Toast.LENGTH_SHORT).show()
-//            }
-//        } catch (e: IOException) {
-//            e.printStackTrace()
-//            Toast.makeText(this, "Ошибка поиска", Toast.LENGTH_SHORT).show()
-//        }
-//    }
 
     private fun setOnClickListeners(){
         binding.BottomPanelBtnAdd.setOnClickListener {
@@ -107,15 +100,20 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun UpdateMarkers(){
+        googleMap.clear()
+        val customIcon = bitmapDescriptorFromVector(this, R.drawable.map_marker)
+
         app.QuietPlaces.map { place ->
-            addMarkerAt(googleMap, place.Address)
+            addMarkerAt(googleMap, place, customIcon!!)
         }
     }
-    fun addMarkerAt(googleMap: GoogleMap, address : MyAddress) {
-        val position = LatLng(address.lat, address.lng) // координаты
+    fun addMarkerAt(googleMap: GoogleMap, place : Place, icon : BitmapDescriptor) {
+        val position = LatLng(place.Address.lat, place.Address.lng) // координаты
         val markerOptions = MarkerOptions()
             .position(position)
+            .icon(icon)
 
-        googleMap.addMarker(markerOptions) // добавляем маркер на карту
+        val marker = googleMap.addMarker(markerOptions)
+        marker?.tag = place
     }
 }

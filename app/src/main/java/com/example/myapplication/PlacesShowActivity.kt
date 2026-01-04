@@ -24,9 +24,10 @@ class PlacesShowActivity: AppCompatActivity() {
         }
     }
     fun setupRecyclerView(){
-//        val adapter = AccountsAdapter(this)
-//
-//        binding.rvItems.layoutManager = LinearLayoutManager(this)
-//        binding.rvItems.adapter = adapter
+        val adapter = PlacesAdapter(this)
+
+        binding.rvItems.layoutManager = LinearLayoutManager(this)
+        binding.rvItems.adapter = adapter
     }
+
 }

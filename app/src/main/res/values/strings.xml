@@ -12,13 +12,30 @@
     <string name="PickOnMapActivity_ButtonConfirm">CONFIRM</string>
 
     <string name="AddActivity_ButtonBack">X</string>
-    <string name="AddActivity_ButtonPick">Pick</string>
+    <string name="AddActivity_ButtonPick">Set</string>
     <string name="AddActivity_ButtonConfirm">Confirm</string>
+    <string name="AddActivity_ButtonChooseImage">Choose</string>
     <string name="AddActivity_TextViewAddress">Address</string>
     <string name="AddActivity_TextViewName">Name</string>
     <string name="AddActivity_TextViewDescription">Description</string>
+    <string name="AddActivity_TextViewImage">Choose Image (optional)</string>
     <string name="AddActivity_TextInputAddressHint">address...</string>
     <string name="AddActivity_TextInputNameHint">name...</string>
     <string name="AddActivity_TextInputDescriptionHint">description...</string>
 
+    <string name="placeItem_Name">Name</string>
+    <string name="placeItem_Description">Description</string>
+    <string name="placeItem_lat">Lat:</string>
+    <string name="placeItem_lng">Lng:</string>
+
+    <string name="PlaceCardActivity_BnBack">X</string>
+    <string name="PlaceCardActivity_BnMap">Show</string>
+    <string name="PlaceCardActivity_tvName">Name:</string>
+    <string name="PlaceCardActivity_tvNameResult">NAME</string>
+    <string name="PlaceCardActivity_tvLat">Lat:</string>
+    <string name="PlaceCardActivity_tvLatResult">LAT</string>
+    <string name="PlaceCardActivity_tvLng">Lng:</string>
+    <string name="PlaceCardActivity_tvLngResult">LNG</string>
+    <string name="PlaceCardActivity_tvDescription">Description:</string>
+    <string name="PlaceCardActivity_tvDescriptionResult">X</string>
 </resources>

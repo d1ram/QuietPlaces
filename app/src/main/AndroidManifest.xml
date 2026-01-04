@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 
     <application
         android:name=".MyApplication"
@@ -29,6 +31,8 @@
         <activity android:name=".PickOnMapActivity"
             android:exported="false"/>
         <activity android:name=".PlacesShowActivity"
+            android:exported="false"/>
+        <activity android:name=".PlaceCardActivity"
             android:exported="false"/>
 
         <meta-data

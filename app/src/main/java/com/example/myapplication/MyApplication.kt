@@ -4,10 +4,8 @@ import android.app.Application
 import android.content.Context
 import java.io.File
 import java.util.UUID
-import com.example.myapplication.PlaceSerializable
-import com.example.myapplication.MyAddressSerializable
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.encodeToString // ВАЖНО добавить этот импорт
 
 class MyApplication : Application() {
 
@@ -16,8 +14,10 @@ class MyApplication : Application() {
             private set
     }
 
-    lateinit var QuietPlaces : MutableList<Place>
+    // Используем обычный список, инициализируем сразу
+    var QuietPlaces: MutableList<Place> = mutableListOf()
         private set
+
     var appUuid: String = ""
         private set
 
@@ -27,14 +27,11 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        QuietPlaces = mutableListOf()
 
-//        clearFromJson()
         loadAppUuid()
         loadAccountsFromJson()
     }
 
-    // UUID приложения
     private fun loadAppUuid() {
         val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         appUuid = prefs.getString("app_uuid", null) ?: UUID.randomUUID().toString().also {
@@ -42,51 +39,52 @@ class MyApplication : Application() {
         }
     }
 
-    private fun savePlacesToJson(){
-        var listToSave = QuietPlaces.map { ple ->
+    // 1. ИСПРАВЛЕНО: Сохранение. Мы должны сохранять список DTO (Serializable), а не основной список
+    fun savePlacesToJson() {
+        val listToSave = QuietPlaces.map { place ->
             PlaceSerializable(
-                Address = MyAddressSerializable (
-                    lat = ple.Address.lat,
-                    lng = ple.Address.lng
-                ),
-                Name = ple.Name,
-                Description = ple.Description
+                id = place.id,
+                Address = MyAddressSerializable(place.Address.lat, place.Address.lng),
+                Name = place.Name,
+                Description = place.Description,
+                imagePath = place.imagePath
             )
         }
         dataFile.writeText(json.encodeToString(listToSave))
     }
 
-    // ──────────────────────  загрузка  ──────────────────────
+    // 2. ИСПРАВЛЕНО: Загрузка. Декодируем список PlaceSerializable
     private fun loadAccountsFromJson() {
         if (!dataFile.exists()) return
 
         try {
-            val list = json.decodeFromString<List<PlaceSerializable>>(dataFile.readText())
+            val fileContent = dataFile.readText()
+            if (fileContent.isEmpty()) return
+
+            val list = json.decodeFromString<List<PlaceSerializable>>(fileContent)
 
             QuietPlaces.clear()
 
             list.forEach { dto ->
                 val place = Place(
+                    id = dto.id, // Теперь ID подхватывается из файла!
                     Address = MyAddress(dto.Address.lat, dto.Address.lng),
                     Name = dto.Name,
-                    Description = dto.Description
+                    Description = dto.Description,
+                    imagePath = dto.imagePath
                 )
                 QuietPlaces.add(place)
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            // Если файл битый - лучше его удалить или очистить
         }
     }
 
-    private fun clearFromJson(){
-        if (dataFile.exists()){
-            dataFile.delete()
-        }
-    }
-
-    fun AddPlaceToList(address : MyAddress, name : String, description : String){
-        var place = Place(address, name, description);
-        QuietPlaces.add(place);
+    fun AddPlaceToList(address: MyAddress, name: String, description: String, imagePath: String? = null) {
+        val id = UUID.randomUUID().toString()
+        val place = Place(id, address, name, description, imagePath)
+        QuietPlaces.add(place)
         savePlacesToJson()
     }
 }

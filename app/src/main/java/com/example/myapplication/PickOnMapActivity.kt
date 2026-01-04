@@ -60,10 +60,13 @@ class PickOnMapActivity : AppCompatActivity(), OnMapReadyCallback {
             val resultIntent = Intent().apply {
                 putExtra("lat", latLng.latitude)
                 putExtra("lng", latLng.longitude)
-                putExtra("address", "✓") // позже добавим геокодинг
+                putExtra("address", "✓")
             }
 
             setResult(RESULT_OK, resultIntent)
+            finish()
+        }
+        binding.btnBack.setOnClickListener {
             finish()
         }
     }

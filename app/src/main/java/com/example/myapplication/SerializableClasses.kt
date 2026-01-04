@@ -16,7 +16,9 @@ data class MyAddressSerializable(
 
 @Serializable
 data class PlaceSerializable(
+    val id: String = java.util.UUID.randomUUID().toString(),
     val Address : MyAddressSerializable,
     val Name : String,
-    val Description : String
+    val Description : String,
+    var imagePath: String? = null
 )

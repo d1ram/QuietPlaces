@@ -19,13 +19,12 @@
     <Button
         android:id="@+id/btnConfirm"
         style="@style/MyButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
+        android:layout_width="185dp"
+        android:layout_height="83dp"
+        android:layout_marginBottom="40dp"
         android:text="@string/AddActivity_ButtonConfirm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -84,8 +83,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tInputAddressT"
-            android:layout_width="257dp"
-            android:layout_height="38dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
             android:hint="@string/AddActivity_TextInputAddressHint" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -101,27 +100,49 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tInputNameT"
-            android:layout_width="313dp"
-            android:layout_height="42dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
             android:hint="@string/AddActivity_TextInputNameHint" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tInputDescription"
         android:layout_width="340dp"
-        android:layout_height="120dp"
+        android:layout_height="110dp"
         android:layout_marginTop="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.338"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDescription"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tInputDescriptionT"
             android:layout_width="match_parent"
-            android:layout_height="117dp"
+            android:layout_height="100dp"
             android:hint="@string/AddActivity_TextInputDescriptionHint" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnChooseImage"
+        style="@style/MyButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/AddActivity_ButtonChooseImage"
+        app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tInputDescription"
+        app:layout_constraintVertical_bias="0.383" />
+
+    <TextView
+        android:id="@+id/tvInputImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/AddActivity_TextViewImage"
+        app:layout_constraintBottom_toTopOf="@+id/btnChooseImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tInputDescription" />
 </androidx.constraintlayout.widget.ConstraintLayout>
