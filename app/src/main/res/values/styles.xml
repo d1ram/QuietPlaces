@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MyButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">#80403F4C</item>
+        <item name="android:textColor">@color/light_text</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="rippleColor">#80FFFFFF</item>
+    </style>
+    <style name="Bottom_Panel_Buttons" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="android:textColor">@color/light_text</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+    <style name="MySearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="android:textColorHint">@color/light_text</item> <!-- серый с прозрачностью -->
+        <item name="android:textColor">@color/light_text</item> <!-- текст черный -->
+    </style>
+</resources>

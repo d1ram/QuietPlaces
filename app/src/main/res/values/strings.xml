@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">My Application</string>
+
+    <string name="MainActivity_Button_Add">X</string>
+    <string name="MainActivity_BottomPanel_Button1">X</string>
+    <string name="MainActivity_BottomPanel_Button2">X</string>
+    <string name="MainActivity_BottomPanel_Button3">X</string>
+    <string name="MainActivity_BottomPanel_Button4">X</string>
+
+    <string name="PlacesActivity_ButtonBack">X</string>
+
+    <string name="PickOnMapActivity_ButtonBack">X</string>
+    <string name="PickOnMapActivity_ButtonConfirm">CONFIRM</string>
+</resources>
