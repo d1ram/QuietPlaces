@@ -5,6 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <View
+        android:id="@+id/view12"
+        android:layout_width="412dp"
+        android:layout_height="249dp"
+        android:background="@drawable/circle_green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/view14"
+        android:layout_width="356dp"
+        android:layout_height="169dp"
+        android:background="@drawable/circle_green_2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/view13"
+        android:layout_width="627dp"
+        android:layout_height="552dp"
+        android:background="@drawable/circle_green_4"
+        app:layout_constraintBottom_toTopOf="@+id/view12"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnBack"
+        app:layout_constraintVertical_bias="0.16000003" />
+
     <Button
         android:id="@+id/btnBack"
         style="@style/MyButtonStyle"
@@ -103,6 +133,7 @@
             android:layout_width="match_parent"
             android:layout_height="53dp"
             android:hint="@string/AddActivity_TextInputNameHint" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -120,6 +151,7 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:hint="@string/AddActivity_TextInputDescriptionHint" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -127,14 +159,11 @@
         style="@style/MyButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
         android:text="@string/AddActivity_ButtonChooseImage"
-        app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
+        app:layout_constraintBottom_toBottomOf="@+id/view13"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tInputDescription"
-        app:layout_constraintVertical_bias="0.383" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tvInputImage"
@@ -145,4 +174,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tInputDescription" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,8 +5,5 @@
     <solid android:color="@color/green_very_dark"/> <!-- цвет прямоугольника -->
 
     <corners
-        android:topLeftRadius="16dp"
-        android:topRightRadius="16dp"
-        android:bottomLeftRadius="0dp"
-        android:bottomRightRadius="0dp"/>
+        android:topLeftRadius="64dp"/>
 </shape>

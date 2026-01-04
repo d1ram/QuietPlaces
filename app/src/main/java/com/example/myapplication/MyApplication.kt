@@ -1,16 +1,23 @@
 package com.example.myapplication
 
+import android.Manifest
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.core.net.toUri
+import android.os.Build
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import java.io.File
 import java.util.UUID
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.encodeToString // ВАЖНО добавить этот импорт
 import java.io.FileOutputStream
 
 
@@ -47,12 +54,28 @@ class MyApplication : Application() {
 
         loadAppUuid()
         loadAccountsFromDB()
+        createNotificationChannel()
     }
 
     private fun loadAppUuid() {
         val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         appUuid = prefs.getString("app_uuid", null) ?: UUID.randomUUID().toString().also {
             prefs.edit().putString("app_uuid", it).apply()
+        }
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "my_channel_id",
+                "Main Notifications",
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = "Application notification"
+            }
+
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(channel)
         }
     }
 
@@ -126,5 +149,33 @@ class MyApplication : Application() {
             imagePath = place.imagePath // Тут уже лежит путь к нашей копии
         )
         db.placeDao().insert(entity)
+
+        sendNotification("New place appeared!")
+    }
+
+    fun sendNotification(message: String) {
+        // Проверка разрешения для Android 13+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+                // Если разрешения нет, мы не можем отправить уведомление.
+                // Его нужно запросить в Activity.
+                return
+            }
+        }
+
+        val notification = NotificationCompat.Builder(this, "my_channel_id")
+            .setSmallIcon(R.drawable.map_marker_dark)
+            .setContentTitle("Quiet Places")
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+            .build()
+
+        try {
+            NotificationManagerCompat.from(this).notify(System.currentTimeMillis().toInt(), notification)
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+        }
     }
 }

@@ -85,6 +85,10 @@ class AddActivity : AppCompatActivity() {
                     binding.tInputNameT.text.toString(),    binding.tInputDescriptionT.text.toString(),
                     selectedImageUri // Pass the String variable directly
                 )
+
+                android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                    app.sendNotification("Место успешно добавлено!")
+                }, 5000)
                 finish()
             }
         }
