@@ -55,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/map"
-        app:srcCompat="@drawable/map_marker" />
+        app:srcCompat="@drawable/map_marker_light" />
     <!--    <ImageView-->
 <!--        android:id="@+id/centerMarker"/>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

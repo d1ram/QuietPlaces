@@ -5,6 +5,7 @@
     <string name="MainActivity_BottomPanel_ButtonAdd">A</string>
     <string name="MainActivity_BottomPanel_ButtonList">L</string>
     <string name="MainActivity_BottomPanel_ButtonSettings">S</string>
+    <string name="MainActivity_PreviewCard_ButtonDetails">View details</string>
 
     <string name="PlacesActivity_ButtonBack">X</string>
 

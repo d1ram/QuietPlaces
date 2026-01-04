@@ -3,9 +3,10 @@ package com.example.myapplication
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
-import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -13,12 +14,12 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.MapStyleOptions
+import androidx.core.graphics.createBitmap
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -27,11 +28,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val app get() = MyApplication.instance;
 
     private lateinit var binding: ActivityMainBinding
-    private val pavlodarCenter = LatLng(52.2870, 76.9654) // центр Павлодара
-    private val pavlodarBounds = LatLngBounds(
-        LatLng(52.20, 76.85), // юго-запад
-        LatLng(52.35, 77.05)  // северо-восток
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,35 +42,63 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        this.googleMap = googleMap
+        this.googleMap = googleMap // Мы сохраняем её как googleMap
 
         try {
-            // Загружаем стиль из raw
             val success = googleMap.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style_dark)
             )
-            if (!success) {
-                Log.e("MapStyle", "Style parsing failed.")
-            }
+            if (!success) Log.e("MapStyle", "Style parsing failed.")
         } catch (e: Resources.NotFoundException) {
             Log.e("MapStyle", "Can't find style.", e)
         }
 
-        // Центр на Павлодаре
         val pavlodar = LatLng(52.2870, 76.9654)
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pavlodar, 12f))
+
+        googleMap.setOnMarkerClickListener { marker ->
+            val place = marker.tag as? Place
+
+            if (place != null) {
+                showMarkerPreview(place)
+            }
+            true
+        }
+
+        googleMap.setOnMapClickListener {
+            binding.markerPreviewCard.visibility = View.GONE
+        }
 
         UpdateMarkers()
     }
 
+    private fun showMarkerPreview(place: Place) {
+        binding.markerPreviewCard.visibility = View.VISIBLE
+        binding.previewName.text = place.Name
+
+        // Загрузка картинки
+        if (!place.imagePath.isNullOrEmpty()) {
+//            val bitmap = BitmapFactory.decodeFile(place.imagePath)
+//            binding.previewImage.setImageBitmap(bitmap)
+            binding.previewImage.setImageResource(R.drawable.map_marker_dark)
+        } else {
+            // Если картинки нет — ставим заглушку
+            binding.previewImage.setImageResource(R.drawable.map_marker_dark)
+        }
+
+        // Кнопка для перехода в детали
+        binding.btnOpenDetail.setOnClickListener {
+            val intent = Intent(this, PlaceCardActivity::class.java)
+            intent.putExtra("PLACE_ID", place.id)
+            startActivity(intent)
+        }
+    }
+
+
     private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
         val vectorDrawable = ContextCompat.getDrawable(context, vectorResId) ?: return null
         vectorDrawable.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
-        val bitmap = Bitmap.createBitmap(
-            vectorDrawable.intrinsicWidth,
-            vectorDrawable.intrinsicHeight,
-            Bitmap.Config.ARGB_8888
-        )
+        val bitmap = createBitmap(vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
         val canvas = android.graphics.Canvas(bitmap)
         vectorDrawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
@@ -97,23 +121,27 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             val intent = Intent(this, PlacesShowActivity::class.java)
             startActivity(intent)
         }
-    }
-
-    private fun UpdateMarkers(){
-        googleMap.clear()
-        val customIcon = bitmapDescriptorFromVector(this, R.drawable.map_marker)
-
-        app.QuietPlaces.map { place ->
-            addMarkerAt(googleMap, place, customIcon!!)
+        binding.btnClosePreview.setOnClickListener {
+            binding.markerPreviewCard.visibility = View.GONE
         }
     }
+
     fun addMarkerAt(googleMap: GoogleMap, place : Place, icon : BitmapDescriptor) {
-        val position = LatLng(place.Address.lat, place.Address.lng) // координаты
+        val position = LatLng(place.Address.lat, place.Address.lng)
         val markerOptions = MarkerOptions()
             .position(position)
             .icon(icon)
 
         val marker = googleMap.addMarker(markerOptions)
+        // Сохраняем весь объект Place, чтобы в клике не искать его снова по ID
         marker?.tag = place
+    }
+    private fun UpdateMarkers(){
+        googleMap.clear()
+        val customIcon = bitmapDescriptorFromVector(this, R.drawable.map_marker_light)
+
+        app.QuietPlaces.map { place ->
+            addMarkerAt(googleMap, place, customIcon!!)
+        }
     }
 }

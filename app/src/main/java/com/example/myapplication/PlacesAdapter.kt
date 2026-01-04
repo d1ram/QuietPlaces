@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.databinding.ActivityPlaceCardBinding
 import com.example.myapplication.databinding.ItemPlaceBinding // Убедитесь, что XML называется item_place.xml
 
 class PlacesAdapter(
@@ -37,14 +36,12 @@ class PlacesAdapter(
 
         holder.binding.tvPlaceItemName.text = place.Name
         holder.binding.tvPlaceItemDescription.text = place.Description
-        holder.binding.tvPlaceItemLat.text = place.Address.lat.toString()
-        holder.binding.tvPlaceItemLng.text = place.Address.lng.toString()
 
         if (!place.imagePath.isNullOrEmpty()) {
             val bitmap = BitmapFactory.decodeFile(place.imagePath)
             holder.binding.ivPlaceItemImage.setImageBitmap(bitmap)
         } else {
-            holder.binding.ivPlaceItemImage.setImageResource(R.drawable.map_marker)
+            holder.binding.ivPlaceItemImage.setImageResource(R.drawable.map_marker_light)
         }
 
         holder.itemView.setOnClickListener {
