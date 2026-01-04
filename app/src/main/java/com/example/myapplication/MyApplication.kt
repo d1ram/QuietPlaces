@@ -2,19 +2,36 @@ package com.example.myapplication
 
 import android.app.Application
 import android.content.Context
+import android.net.Uri
+import androidx.core.net.toUri
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import java.io.File
 import java.util.UUID
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString // ВАЖНО добавить этот импорт
+import java.io.FileOutputStream
+
+
+@Database(entities = [PlaceEntity::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun placeDao(): PlaceDao
+}
 
 class MyApplication : Application() {
+
+    val db by lazy {
+        Room.databaseBuilder(this, AppDatabase::class.java, "quiet_places_db")
+            .allowMainThreadQueries()
+            .build()
+    }
 
     companion object {
         lateinit var instance: MyApplication
             private set
     }
 
-    // Используем обычный список, инициализируем сразу
     var QuietPlaces: MutableList<Place> = mutableListOf()
         private set
 
@@ -29,7 +46,7 @@ class MyApplication : Application() {
         instance = this
 
         loadAppUuid()
-        loadAccountsFromJson()
+        loadAccountsFromDB()
     }
 
     private fun loadAppUuid() {
@@ -39,52 +56,75 @@ class MyApplication : Application() {
         }
     }
 
-    // 1. ИСПРАВЛЕНО: Сохранение. Мы должны сохранять список DTO (Serializable), а не основной список
-    fun savePlacesToJson() {
-        val listToSave = QuietPlaces.map { place ->
-            PlaceSerializable(
-                id = place.id,
-                Address = MyAddressSerializable(place.Address.lat, place.Address.lng),
-                Name = place.Name,
-                Description = place.Description,
-                imagePath = place.imagePath
-            )
+    private fun copyFileToInternalStorage(uri: Uri): String? {
+        return try {
+            val fileName = "img_${UUID.randomUUID()}.jpg"
+            val file = File(filesDir, fileName)
+            contentResolver.openInputStream(uri)?.use { input ->
+                FileOutputStream(file).use { output ->
+                    input.copyTo(output)
+                }
+            }
+            file.absolutePath
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
-        dataFile.writeText(json.encodeToString(listToSave))
     }
 
-    // 2. ИСПРАВЛЕНО: Загрузка. Декодируем список PlaceSerializable
-    private fun loadAccountsFromJson() {
-        if (!dataFile.exists()) return
 
+    fun savePlacesToDB() {
+        QuietPlaces.forEach { place ->
+            val entity = PlaceEntity(
+                id = place.id,
+                name = place.Name,
+                description = place.Description,
+                lat = place.Address.lat,
+                lng = place.Address.lng,
+                imagePath = place.imagePath
+            )
+            db.placeDao().insert(entity)
+        }
+    }
+
+    private fun loadAccountsFromDB() {
         try {
-            val fileContent = dataFile.readText()
-            if (fileContent.isEmpty()) return
-
-            val list = json.decodeFromString<List<PlaceSerializable>>(fileContent)
+            val entities = db.placeDao().getAll()
 
             QuietPlaces.clear()
 
-            list.forEach { dto ->
+            entities.forEach { entity ->
                 val place = Place(
-                    id = dto.id, // Теперь ID подхватывается из файла!
-                    Address = MyAddress(dto.Address.lat, dto.Address.lng),
-                    Name = dto.Name,
-                    Description = dto.Description,
-                    imagePath = dto.imagePath
+                    id = entity.id,
+                    Address = MyAddress(entity.lat, entity.lng),
+                    Name = entity.name,
+                    Description = entity.description,
+                    imagePath = entity.imagePath
                 )
                 QuietPlaces.add(place)
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            // Если файл битый - лучше его удалить или очистить
         }
     }
 
-    fun AddPlaceToList(address: MyAddress, name: String, description: String, imagePath: String? = null) {
+
+    fun AddPlaceToList(address: MyAddress, name: String, description: String, imageUri: Uri? = null) {
+        val permanentPath = imageUri?.let { copyFileToInternalStorage(it) }
+
         val id = UUID.randomUUID().toString()
-        val place = Place(id, address, name, description, imagePath)
+        val place = Place(id, address, name, description, permanentPath)
+
         QuietPlaces.add(place)
-        savePlacesToJson()
+
+        val entity = PlaceEntity(
+            id = place.id,
+            name = place.Name,
+            description = place.Description,
+            lat = place.Address.lat,
+            lng = place.Address.lng,
+            imagePath = place.imagePath // Тут уже лежит путь к нашей копии
+        )
+        db.placeDao().insert(entity)
     }
 }

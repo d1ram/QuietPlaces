@@ -104,6 +104,7 @@
     <!-- activity_main.xml -->
     <androidx.cardview.widget.CardView
         android:id="@+id/markerPreviewCard"
+        android:visibility="gone"
         android:layout_width="331dp"
         android:layout_height="149dp"
         android:layout_margin="16dp"

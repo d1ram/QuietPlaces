@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    kotlin("kapt")
 }
 
 android {
@@ -54,4 +55,9 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
     implementation(libs.kotlinx.serialization.json)
+
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$room_version") // Не забудь добавить plugin "kotlin-kapt" вверху
 }

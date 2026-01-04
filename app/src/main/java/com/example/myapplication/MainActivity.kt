@@ -65,9 +65,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             true
         }
 
-        googleMap.setOnMapClickListener {
-            binding.markerPreviewCard.visibility = View.GONE
-        }
+//        googleMap.setOnMapClickListener {
+//            binding.markerPreviewCard.visibility = View.GONE
+//        }
 
         UpdateMarkers()
     }
@@ -76,17 +76,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.markerPreviewCard.visibility = View.VISIBLE
         binding.previewName.text = place.Name
 
-        // Загрузка картинки
         if (!place.imagePath.isNullOrEmpty()) {
-//            val bitmap = BitmapFactory.decodeFile(place.imagePath)
-//            binding.previewImage.setImageBitmap(bitmap)
-            binding.previewImage.setImageResource(R.drawable.map_marker_dark)
+            val bitmap = BitmapFactory.decodeFile(place.imagePath)
+            binding.previewImage.setImageBitmap(bitmap)
+//            binding.previewImage.setImageResource(R.drawable.map_marker_dark)
         } else {
-            // Если картинки нет — ставим заглушку
             binding.previewImage.setImageResource(R.drawable.map_marker_dark)
         }
 
-        // Кнопка для перехода в детали
         binding.btnOpenDetail.setOnClickListener {
             val intent = Intent(this, PlaceCardActivity::class.java)
             intent.putExtra("PLACE_ID", place.id)

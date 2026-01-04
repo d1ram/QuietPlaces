@@ -25,13 +25,12 @@ class AddActivity : AppCompatActivity() {
 
     var currentPhotoPath: String? = null
 
-    private val pickImageLauncher = registerForActivityResult(
-        ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         if (uri != null) {
             selectedImageUri = uri
         }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +80,11 @@ class AddActivity : AppCompatActivity() {
         }
         binding.btnConfirm.setOnClickListener {
             if (validateInput()){
-                app.AddPlaceToList(address!!, binding.tInputNameT.text.toString(), binding.tInputDescriptionT.text.toString(), currentPhotoPath.toString())
+                app.AddPlaceToList(
+                    address!!,
+                    binding.tInputNameT.text.toString(),    binding.tInputDescriptionT.text.toString(),
+                    selectedImageUri // Pass the String variable directly
+                )
                 finish()
             }
         }
